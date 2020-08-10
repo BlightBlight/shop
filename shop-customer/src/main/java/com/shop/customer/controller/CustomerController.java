@@ -76,12 +76,16 @@ public class CustomerController {
 		 * 必须在同一个页面完成一整套流程才行。一旦检测到了切换屏幕，回来后还是一样要重新获取验证码。
 		 * 所以选择锁住手机号，提高用户体验。
 		 */
+<<<<<<< HEAD
 		/*
 		 * 锁住手机号，防止同一手机号注册多个账号
 		 * 这里可以继续优化一下，来个布隆过滤器或者HashMap之类的
 		 * 先对手机号进行录入，判断是否存在手机号，再进行加锁操作
 		 * 如果在分布式的情况下，可以使用分布式锁进行锁操作
 		 */
+=======
+
+>>>>>>> 2089505... 第二次提交
 		InterProcessMutex lock = getCustomerLockBymobileNum(registerVo.getMobileNum());
 		try {
 			lock.acquire();

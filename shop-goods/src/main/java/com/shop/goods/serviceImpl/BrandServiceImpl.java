@@ -73,16 +73,31 @@ public class BrandServiceImpl implements BrandService{
 	@Transactional(rollbackFor = DAOException.class)
 	public boolean removeBrandByName(String brandName) {
 		Brand brand = getBrandByName(brandName);
+<<<<<<< HEAD
 		// 删除goods_brand表
 		try {
 			int effectRow = brandDao.removeBrandByName(brandName);
 			if (effectRow != 1) {
 				throw new DAOException("删除goods_brand表异常");
 			}
+=======
+		
+		// 删除goods_brand表
+		try {
+			// 分布锁一锁上后，马上将缓存删除
+>>>>>>> 2089505... 第二次提交
 			log.debug("根据brandName：" + brandName + "删除brand缓存");
 			brandCacheService.delBrandByName(brandName);
 			log.debug("根据brandId：" + brand.getBrandId() + "删除brandName：" + brandName + "缓存");
 			brandCacheService.delBrandNameById(brand.getBrandId());
+<<<<<<< HEAD
+=======
+			
+			int effectRow = brandDao.removeBrandByName(brandName);
+			if (effectRow != 1) {
+				throw new DAOException("删除goods_brand表异常");
+			}
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("删除goods_brand表异常");
 			throw new DAOException(e);
@@ -97,6 +112,7 @@ public class BrandServiceImpl implements BrandService{
 	@Transactional(rollbackFor = DAOException.class)
 	public int updateBrand(UpdateBrandVo updateBrandVo) {
 		Brand brand = getBrandById(updateBrandVo.getBrandId());
+<<<<<<< HEAD
 		
 		InterProcessMutex lock = null;
 		// brand修改名称与旧名称不同则将旧名称锁住
@@ -104,6 +120,8 @@ public class BrandServiceImpl implements BrandService{
 			lock = getBrandLockByName(brand.getBrandName());
 		}
 		
+=======
+>>>>>>> 2089505... 第二次提交
 		Brand databasebrand = new Brand();
 		databasebrand.setBrandId(updateBrandVo.getBrandId());
 		databasebrand.setCategoryId(updateBrandVo.getCategoryId());
@@ -111,20 +129,41 @@ public class BrandServiceImpl implements BrandService{
 		databasebrand.setUpdateTime(updateBrandVo.getUpdateTime());
 		log.debug("存入goods_brand实体：" + databasebrand.toString());
 		
+<<<<<<< HEAD
+=======
+		InterProcessMutex lock = null;
+		// brand修改名称与旧名称不同则将旧名称锁住
+		if (!brand.getBrandName().equals(updateBrandVo.getBrandName())) {
+			lock = getBrandLockByName(brand.getBrandName());
+		}
+		
+>>>>>>> 2089505... 第二次提交
 		// 修改goods_brand表
 		int effectRow = 0;
 		try {
 			if (lock != null) {
 				lock.acquire();
 			}
+<<<<<<< HEAD
 			effectRow = brandDao.updateBrand(databasebrand);
 			if (effectRow != 1) {
 				throw new DAOException("修改goods_brand表异常");
 			}
+=======
+			// 分布锁一锁上后，马上将缓存删除
+>>>>>>> 2089505... 第二次提交
 			log.debug("根据brandName：" + brand.getBrandName() + "删除brand缓存");
 			brandCacheService.delBrandByName(brand.getBrandName());
 			log.debug("根据brandId：" + brand.getBrandId() + "删除brandName：" + brand.getBrandName() + "缓存");
 			brandCacheService.delBrandNameById(brand.getBrandId());
+<<<<<<< HEAD
+=======
+			
+			effectRow = brandDao.updateBrand(databasebrand);
+			if (effectRow != 1) {
+				throw new DAOException("修改goods_brand表异常");
+			}
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改goods_brand表异常");
 			throw new DAOException(e);

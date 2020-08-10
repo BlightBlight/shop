@@ -95,13 +95,23 @@ public class ShopCartServiceImpl implements ShopCartService{
 	public int removeCartItemById(Long cartItemId, Long customerId) {
 		int effectRow = 0;
 		try {
+<<<<<<< HEAD
+=======
+			// 分布锁一锁上后，马上将缓存删除
+			log.debug("根据cartItemId：" + cartItemId + "删除cartItem缓存");
+			shopCartCacheService.delCartItemById(cartItemId);
+			
+>>>>>>> 2089505... 第二次提交
 			effectRow = shopCartDao.removeCartItemById(cartItemId, LocalDateTime.now());
 			if (effectRow != 1) {
 				throw new DAOException("修改customer_cartitem表异常");
 			}
+<<<<<<< HEAD
 			
 			log.debug("根据cartItemId：" + cartItemId + "删除cartItem缓存");
 			shopCartCacheService.delCartItemById(cartItemId);
+=======
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改customer_cartitem表异常");
 			throw new DAOException(e);
@@ -125,12 +135,22 @@ public class ShopCartServiceImpl implements ShopCartService{
     public int updateCartItemNumber(Long cartItemId, Long number) {
     	int effectRow = 0;
     	try {
+<<<<<<< HEAD
+=======
+    		// 分布锁一锁上后，马上将缓存删除
+			log.debug("根据cartItemId：" + cartItemId + "删除cartItem缓存");
+			shopCartCacheService.delCartItemById(cartItemId);
+			
+>>>>>>> 2089505... 第二次提交
     		effectRow = shopCartDao.updateCartItemNumberById(cartItemId, number, LocalDateTime.now());
 			if (effectRow != 1) {
 				throw new DAOException("修改customer_cartitem表异常");
 			}
+<<<<<<< HEAD
 			log.debug("根据cartItemId：" + cartItemId + "删除cartItem缓存");
 			shopCartCacheService.delCartItemById(cartItemId);
+=======
+>>>>>>> 2089505... 第二次提交
     	} catch (DataAccessException e) {
 			log.error("修改customer_cartitem表异常");
 			throw new DAOException(e);
@@ -146,12 +166,22 @@ public class ShopCartServiceImpl implements ShopCartService{
     public int updateCartItemSpecValue(Long cartItemId, Long skuId, BigDecimal price, Long specValueId, String specValueName) {
     	int effectRow = 0;
     	try {
+<<<<<<< HEAD
+=======
+    		// 分布锁一锁上后，马上将缓存删除
+			log.debug("根据cartItemId：" + cartItemId + "删除cartItem缓存");
+			shopCartCacheService.delCartItemById(cartItemId);
+			
+>>>>>>> 2089505... 第二次提交
     		effectRow = shopCartDao.updateCartItemSpecValueById(cartItemId, skuId, price, specValueId, specValueName, LocalDateTime.now());
 			if (effectRow != 1) {
 				throw new DAOException("修改customer_cartitem表异常");
 			}
+<<<<<<< HEAD
 			log.debug("根据cartItemId：" + cartItemId + "删除cartItem缓存");
 			shopCartCacheService.delCartItemById(cartItemId);
+=======
+>>>>>>> 2089505... 第二次提交
     	} catch (DataAccessException e) {
 			log.error("修改customer_cartitem表异常");
 			throw new DAOException(e);

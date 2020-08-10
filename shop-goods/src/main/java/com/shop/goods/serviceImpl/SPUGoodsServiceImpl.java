@@ -179,12 +179,22 @@ public class SPUGoodsServiceImpl implements SPUGoodsService{
 		}
 		// 删除规格表
 		try {
+<<<<<<< HEAD
+=======
+			// 分布锁一锁上后，马上将缓存删除
+			log.debug("根据specId：" + spuGoods.getSpecId() + "删除SPUGoodsSpec缓存");
+			spuGoodsCacheService.delSPUGoodsSpecById(spuGoods.getSpecId());
+			
+>>>>>>> 2089505... 第二次提交
 			effectRow = spuGoodsDao.removeSPUGoodsSpecById(spuGoods.getSpecId());
 			if (effectRow != 1) {
 				throw new DAOException("删除goods_spec_values表异常");
 			}
+<<<<<<< HEAD
 			log.debug("根据specId：" + spuGoods.getSpecId() + "删除SPUGoodsSpec缓存");
 			spuGoodsCacheService.delSPUGoodsSpecById(spuGoods.getSpecId());
+=======
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("删除goods_spec_values表异常");
 			throw new DAOException(e);
@@ -194,14 +204,26 @@ public class SPUGoodsServiceImpl implements SPUGoodsService{
 		}
 		// 删除SPU商品
 		try {
+<<<<<<< HEAD
 			effectRow = spuGoodsDao.removeSPUGoodsById(spuGoods.getSpuId());
 			if (effectRow != 1) {
 				throw new DAOException("删除goods_spu表异常");
 			}
+=======
+			// 分布锁一锁上后，马上将缓存删除
+>>>>>>> 2089505... 第二次提交
 			log.debug("根据spuName：" + spuGoods.getSpuName() +"删除SPUGoods缓存");
 			spuGoodsCacheService.delSPUGoodsByName(spuGoods.getSpuName());
 			log.debug("根据spuId：" + spuGoods.getSpuId() + "删除spuName：" + spuGoods.getSpuName() + "缓存");
 			spuGoodsCacheService.delSPUGoodsNameById(spuGoods.getSpuId());
+<<<<<<< HEAD
+=======
+			
+			effectRow = spuGoodsDao.removeSPUGoodsById(spuGoods.getSpuId());
+			if (effectRow != 1) {
+				throw new DAOException("删除goods_spu表异常");
+			}
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("删除goods_spu表异常");
 			throw new DAOException(e);
@@ -214,6 +236,7 @@ public class SPUGoodsServiceImpl implements SPUGoodsService{
 	
 	@Override
 	public boolean updateSPUGoods(UpdateSPUGoodsVo updateSPUGoodsVo) {
+<<<<<<< HEAD
 		SPUGoodsSpec spuGoodsSpec = getSPUGoodsSpecById(updateSPUGoodsVo.getSpecId());
 		
 		int effectRow = 0;
@@ -256,6 +279,9 @@ public class SPUGoodsServiceImpl implements SPUGoodsService{
 		
 		SPUGoods spuGoods = getSPUGoodsById(updateSPUGoodsVo.getSpuId());
 		// 修改SPU商品
+=======
+		SPUGoods spuGoods = getSPUGoodsById(updateSPUGoodsVo.getSpuId());
+>>>>>>> 2089505... 第二次提交
 		SPUGoods databasespuGoods = new SPUGoods();
 		databasespuGoods.setCategoryId(updateSPUGoodsVo.getCategoryId());
 		databasespuGoods.setBrandId(updateSPUGoodsVo.getBrandId());
@@ -273,18 +299,35 @@ public class SPUGoodsServiceImpl implements SPUGoodsService{
 		if (!spuGoods.getSpuName().equals(updateSPUGoodsVo.getSpuName())) {
 			lock = getSPUGoodsLockByName(spuGoods.getSpuName());
 		}
+<<<<<<< HEAD
+=======
+		
+		int effectRow = 0;
+>>>>>>> 2089505... 第二次提交
 		try {
 			if (lock != null) {
 				lock.acquire();
 			}
+<<<<<<< HEAD
 			effectRow = spuGoodsDao.updateSPUGoods(databasespuGoods);
 			if (effectRow != 1) {
 				throw new DAOException("修改goods_spu表异常");
 			}
+=======
+			// 分布锁一锁上后，马上将缓存删除
+>>>>>>> 2089505... 第二次提交
 			log.debug("根据spuName：" + spuGoods.getSpuName() + "删除SPUGoods缓存");
 			spuGoodsCacheService.delSPUGoodsByName(spuGoods.getSpuName());
 			log.debug("根据spuId：" + spuGoods.getSpuId() + "删除spuName：" + spuGoods.getSpuName() + "缓存");
 			spuGoodsCacheService.delSPUGoodsNameById(spuGoods.getSpuId());
+<<<<<<< HEAD
+=======
+			
+			effectRow = spuGoodsDao.updateSPUGoods(databasespuGoods);
+			if (effectRow != 1) {
+				throw new DAOException("修改goods_spu表异常");
+			}
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改goods_spu表异常");
 			throw new DAOException(e);
@@ -303,6 +346,49 @@ public class SPUGoodsServiceImpl implements SPUGoodsService{
 				log.error(Thread.currentThread() + "释放锁出现BUG");
 			}
 		}
+<<<<<<< HEAD
+=======
+		
+		SPUGoodsSpec spuGoodsSpec = getSPUGoodsSpecById(updateSPUGoodsVo.getSpecId());
+		// 旧规格名称与新规格名称不同则修改
+		if (!spuGoodsSpec.getSpecName().equals(updateSPUGoodsVo.getSpecName())) {
+			SPUGoodsSpec databasespuGoodsSpec = new SPUGoodsSpec();
+			databasespuGoodsSpec.setSpecId(updateSPUGoodsVo.getSpecId());
+			databasespuGoodsSpec.setSpecName(updateSPUGoodsVo.getSpecName());
+			databasespuGoodsSpec.setUpdateTime(updateSPUGoodsVo.getUpdateTime());
+			log.debug("存入goods_spec表实体为：" + databasespuGoodsSpec.toString());
+			
+			lock = getSPUGoodsSpecLockById(databasespuGoodsSpec.getSpecId());
+			try {
+				lock.acquire();
+				// 分布锁一锁上后，马上将缓存删除
+				log.debug("根据specId：" + databasespuGoodsSpec.getSpecId() + "删除SPUGoodsSpec缓存");
+				spuGoodsCacheService.delSPUGoodsSpecById(databasespuGoodsSpec.getSpecId());
+				
+				effectRow = spuGoodsDao.updateSPUGoodsSpec(databasespuGoodsSpec);
+				if (effectRow != 1) {
+					throw new DAOException("修改goods_spec表异常");
+				}
+			} catch (DataAccessException e) {
+				log.error("修改goods_spec表异常");
+				throw new DAOException(e);
+			} catch (DAOException e) {
+				log.error("修改goods_spec表异常");
+				throw new DAOException(e);
+			} catch (Exception e) {
+				log.error("不明异常");
+				throw new DAOException(e);
+			} finally {
+				try {
+					if (lock.isOwnedByCurrentThread()) {
+						lock.release();
+					}
+				} catch (Exception e) {
+					log.error(Thread.currentThread() + "释放锁出现BUG");
+				}
+			}
+		}
+>>>>>>> 2089505... 第二次提交
 		return true;
 	}
 	

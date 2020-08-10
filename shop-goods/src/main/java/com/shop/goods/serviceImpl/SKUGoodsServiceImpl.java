@@ -120,6 +120,20 @@ public class SKUGoodsServiceImpl implements SKUGoodsService{
 		// 删除goods_spec_values表
 		try {
 			lock.acquire();
+<<<<<<< HEAD
+=======
+			
+			// 分布锁一锁上后，马上将缓存删除
+			log.debug("根据skuName：" + skuGoods.getSkuName() + "删除SKUGoods缓存");
+			skuGoodsCacheService.delSKUGoodsByName(skuGoods.getSkuName());
+			log.debug("根据skuId：" + skuGoods.getSpecValueId() + "删除skuName：" + skuGoods.getSkuName() + "缓存");
+			skuGoodsCacheService.delSKUGoodsNameById(skuGoods.getSkuId());
+			log.debug("根据specValueId：" + skuGoods.getSpecValueId() + "删除skuName：" + skuGoods.getSkuName() + "缓存");
+			skuGoodsCacheService.delSKUGoodsSpecValueById(skuGoods.getSpecValueId());
+			log.debug("根据specValueId：" + skuGoods.getSpecValueId() + "删除SKUGoodsSpecValue缓存");
+			skuGoodsCacheService.delSKUGoodsSpecValueById(skuGoods.getSpecValueId());
+			
+>>>>>>> 2089505... 第二次提交
 			effectRow = skuGoodsDao.removeSKUGoodsSpecValueById(skuGoods.getSpecValueId());
 			if (effectRow != 1) {
 				throw new DAOException("修改goods_spec_values表异常");
@@ -148,6 +162,7 @@ public class SKUGoodsServiceImpl implements SKUGoodsService{
 			if (effectRow != 1) {
 				throw new DAOException("修改goods_sku表异常");
 			}
+<<<<<<< HEAD
 			log.debug("根据skuName：" + skuGoods.getSkuName() + "删除SKUGoods缓存");
 			skuGoodsCacheService.delSKUGoodsByName(skuGoods.getSkuName());
 			log.debug("根据skuId：" + skuGoods.getSpecValueId() + "删除skuName：" + skuGoods.getSkuName() + "缓存");
@@ -156,6 +171,8 @@ public class SKUGoodsServiceImpl implements SKUGoodsService{
 			skuGoodsCacheService.delSKUGoodsSpecValueById(skuGoods.getSpecValueId());
 			log.debug("根据specValueId：" + skuGoods.getSpecValueId() + "删除SKUGoodsSpecValue缓存");
 			skuGoodsCacheService.delSKUGoodsSpecValueById(skuGoods.getSpecValueId());
+=======
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改goods_sku表异常");
 			throw new DAOException(e);
@@ -168,6 +185,7 @@ public class SKUGoodsServiceImpl implements SKUGoodsService{
 	
 	@Override
 	public boolean updateSKUGoods(UpdateSKUGoodsVo updateSKUGoodsVo) {
+<<<<<<< HEAD
 		SKUGoodsSpecValue skuGoodsSpecValue = getSKUGoodsSpecValueById(updateSKUGoodsVo.getSpecValueId());
 		
 		int effectRow = 0;
@@ -216,6 +234,9 @@ public class SKUGoodsServiceImpl implements SKUGoodsService{
 			lock = getSKUGoodsLockByName(skuGoods.getSkuName());
 		}
 		
+=======
+		SKUGoods skuGoods = getSKUGoodsById(updateSKUGoodsVo.getSkuId());
+>>>>>>> 2089505... 第二次提交
 		SKUGoods tempskuGoods = new SKUGoods();
 		tempskuGoods.setSkuId(updateSKUGoodsVo.getSkuId());
 		tempskuGoods.setSpuId(updateSKUGoodsVo.getSpuId());
@@ -227,20 +248,43 @@ public class SKUGoodsServiceImpl implements SKUGoodsService{
 		tempskuGoods.setUpdateTime(updateSKUGoodsVo.getUpdateTime());
 		log.debug("存入goods_sku表实体：" + tempskuGoods.toString());
 		
+<<<<<<< HEAD
+=======
+		//将旧sku商品名称锁起来
+		InterProcessMutex lock = null;
+		if (!skuGoods.getSkuName().equals(updateSKUGoodsVo.getSkuName())) {
+			lock = getSKUGoodsLockByName(skuGoods.getSkuName());
+		}
+		
+		int effectRow = 0;
+>>>>>>> 2089505... 第二次提交
 		try {
 			if (lock != null) {
 				lock.acquire();
 			}
+<<<<<<< HEAD
 			effectRow = skuGoodsDao.updateSKUGoods(tempskuGoods);
 			if (effectRow != 1) {
 				throw new DAOException("修改goods_spec_values表异常");
 			}
+=======
+			
+			// 分布锁一锁上后，马上将缓存删除
+>>>>>>> 2089505... 第二次提交
 			log.debug("根据skuName：" + skuGoods.getSkuName() + "删除SKUGoods缓存");
 			skuGoodsCacheService.delSKUGoodsByName(skuGoods.getSkuName());
 			log.debug("根据skuId：" + skuGoods.getSkuId() + "删除skuName：" + skuGoods.getSkuName() + "缓存");
 			skuGoodsCacheService.delSKUGoodsNameById(skuGoods.getSkuId());
 			log.debug("根据specValueId：" + skuGoods.getSpecValueId() + "删除skuName：" + skuGoods.getSkuName() + "缓存");
 			skuGoodsCacheService.delSKUGoodsNameBySpecValueId(skuGoods.getSpecValueId());
+<<<<<<< HEAD
+=======
+			
+			effectRow = skuGoodsDao.updateSKUGoods(tempskuGoods);
+			if (effectRow != 1) {
+				throw new DAOException("修改goods_spec_values表异常");
+			}
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改goods_sku表异常");
 			throw new DAOException(e);
@@ -259,6 +303,52 @@ public class SKUGoodsServiceImpl implements SKUGoodsService{
 				log.error(Thread.currentThread() + "释放锁出现BUG");
 			}
 		}
+<<<<<<< HEAD
+=======
+		
+		SKUGoodsSpecValue skuGoodsSpecValue = getSKUGoodsSpecValueById(updateSKUGoodsVo.getSpecValueId());
+		
+		// 规格值有变化则修改规格值表
+		if (!skuGoodsSpecValue.getSpecValueName().equals(updateSKUGoodsVo.getSpecValueName())) {
+			SKUGoodsSpecValue databaseskuGoodsSpecValue = new SKUGoodsSpecValue();
+			databaseskuGoodsSpecValue.setSpecId(updateSKUGoodsVo.getSpecId());
+			databaseskuGoodsSpecValue.setSpecValueId(updateSKUGoodsVo.getSpecValueId());
+			databaseskuGoodsSpecValue.setSpecValueName(updateSKUGoodsVo.getSpecValueName());
+			databaseskuGoodsSpecValue.setUpdateTime(updateSKUGoodsVo.getUpdateTime());
+			log.debug("存入goods_spec_values表实体：" + databaseskuGoodsSpecValue.toString());
+			
+			lock = getSKUGoodsSpecValueLockById(databaseskuGoodsSpecValue.getSpecValueId());
+			try {
+				lock.acquire();
+				
+				// 分布锁一锁上后，马上将缓存删除
+				log.debug("根据specValueId：" + databaseskuGoodsSpecValue.getSpecValueId() + "删除SKUGoodsSpecValue缓存");
+				skuGoodsCacheService.delSKUGoodsSpecValueById(databaseskuGoodsSpecValue.getSpecValueId());
+				
+				effectRow = skuGoodsDao.updateSKUGoodsSpecValue(databaseskuGoodsSpecValue);
+				if (effectRow != 1) {
+					throw new DAOException("修改goods_spec_values表异常");
+				}
+			} catch (DataAccessException e) {
+				log.error("修改goods_spec_values表异常");
+				throw new DAOException(e);
+			} catch (DAOException e) {
+				log.error("修改goods_spec_values表异常");
+				throw new DAOException(e);
+			} catch (Exception e) {
+				log.error(Thread.currentThread() + "不明异常");
+				throw new DAOException(e);
+			} finally {
+				try {
+					if (lock.isOwnedByCurrentThread()) {
+						lock.release();
+					}
+				} catch (Exception e) {
+					log.error(Thread.currentThread() + "释放锁出现BUG");
+				}
+			}
+		}
+>>>>>>> 2089505... 第二次提交
 		return true;
 	}
 	

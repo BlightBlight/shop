@@ -161,16 +161,28 @@ public class CustomerServiceImpl implements CustomerService {
 		int effectRow = 0;
 		try {
 			lock.acquire();
+<<<<<<< HEAD
 			effectRow = customerDao.delayRemoveCustomerBymobileNum(mobileNum, LocalDateTime.now());
 			if (effectRow != 1) {
 				throw new DAOException("修改customer_info表异常");
 			}
+=======
+			// 分布锁一锁上后，马上将缓存删除
+>>>>>>> 2089505... 第二次提交
 			log.debug("根据mobileNum：" + mobileNum + ",删除customer缓存");
 			customerCacheService.delCustomerBymobileNum(mobileNum);
 			log.debug("根据customerId：" + customer.getCustomerId() + ",删除mobileNum：" + customer.getCustomermobileNum() + "缓存");
 			customerCacheService.delCustomermobileNumById(customer.getCustomerId());
 			log.debug("根据mobileNum：" + mobileNum + ",删除customerInfo缓存" );
 			customerCacheService.delCustomerInfoBymobileNum(mobileNum);
+<<<<<<< HEAD
+=======
+			
+			effectRow = customerDao.delayRemoveCustomerBymobileNum(mobileNum, LocalDateTime.now());
+			if (effectRow != 1) {
+				throw new DAOException("修改customer_info表异常");
+			}
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改customer_info表异常");
 			throw new DAOException(e);
@@ -215,6 +227,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	@Transactional(rollbackFor = DAOException.class)
 	public int updateCustomer(UpdateCustomerVo updateCustomerVo) {
+<<<<<<< HEAD
 		int effectRow = 0;
 		try {
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -222,12 +235,29 @@ public class CustomerServiceImpl implements CustomerService {
 			map.put("customernickName", updateCustomerVo.getNickName());
 			map.put("updateTime", updateCustomerVo.getUpdateTime());
 			log.debug("存入数据库customer信息：" + map.toString() + ",修改时间：" + updateCustomerVo.getUpdateTime());
+=======
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("customerId", updateCustomerVo.getCustomerId());
+		map.put("customernickName", updateCustomerVo.getNickName());
+		map.put("updateTime", updateCustomerVo.getUpdateTime());
+		log.debug("存入数据库customer信息：" + map.toString() + ",修改时间：" + updateCustomerVo.getUpdateTime());
+		
+		int effectRow = 0;
+		try {
+			// 分布锁一锁上后，马上将缓存删除
+			log.debug("根据mobileNum：" + updateCustomerVo.getMobileNum() + ",删除customerInfo缓存" );
+			customerCacheService.delCustomerInfoBymobileNum(updateCustomerVo.getMobileNum());
+			
+>>>>>>> 2089505... 第二次提交
 			effectRow = customerDao.updateCustomer(map);
 			if (effectRow != 1) {
 				throw new DAOException("修改customer_info表异常");
 			}
+<<<<<<< HEAD
 			log.debug("根据mobileNum：" + updateCustomerVo.getMobileNum() + ",删除customerInfo缓存" );
 			customerCacheService.delCustomerInfoBymobileNum(updateCustomerVo.getMobileNum());
+=======
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改customer_info表异常");
 			throw new DAOException(e);

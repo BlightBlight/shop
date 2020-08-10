@@ -93,14 +93,26 @@ public class CategoryServiceImpl implements CategoryService{
 		}
 		// 删除goods_category表
 		try {
+<<<<<<< HEAD
 			effectRow = categoryDao.removeCategoryById(categoryId);
 			if (effectRow != 1) {
 				throw new DAOException("删除goods_category表异常");
 			}
+=======
+			// 分布锁一锁上后，马上将缓存删除
+>>>>>>> 2089505... 第二次提交
 			log.debug("根据categoryName：" + categoryName + "删除category缓存");
 			categoryCacheService.delCategoryByName(categoryName);
 			log.debug("根据categoryId：" + categoryId + "删除categoryName：" + category.getCategoryName() + "缓存");
 			categoryCacheService.delCategoryNameById(categoryId);
+<<<<<<< HEAD
+=======
+			
+			effectRow = categoryDao.removeCategoryById(categoryId);
+			if (effectRow != 1) {
+				throw new DAOException("删除goods_category表异常");
+			}
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("删除goods_category表异常");
 			throw new DAOException(e);
@@ -132,14 +144,26 @@ public class CategoryServiceImpl implements CategoryService{
 			if (lock != null) {
 				lock.acquire();
 			}
+<<<<<<< HEAD
 			effectRow = categoryDao.updateCategory(databasecategory);
 			if (effectRow != 1) {
 				throw new DAOException("修改goods_category表异常");
 			}
+=======
+			// 分布锁一锁上后，马上将缓存删除
+>>>>>>> 2089505... 第二次提交
 			log.debug("根据categoryName：" + category.getCategoryName() + "删除category缓存");
 			categoryCacheService.delCategoryByName(category.getCategoryName());
 			log.debug("根据categoryId：" + category.getCategoryId() + "删除categoryName：" + category.getCategoryName() + "缓存");
 			categoryCacheService.delCategoryNameById(category.getCategoryId());
+<<<<<<< HEAD
+=======
+			
+			effectRow = categoryDao.updateCategory(databasecategory);
+			if (effectRow != 1) {
+				throw new DAOException("修改goods_category表异常");
+			}
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改goods_category表异常");
 			throw new DAOException(e);

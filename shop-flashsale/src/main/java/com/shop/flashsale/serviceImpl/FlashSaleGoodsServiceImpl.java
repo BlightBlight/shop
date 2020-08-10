@@ -121,12 +121,22 @@ public class FlashSaleGoodsServiceImpl implements FlashSaleGoodsService {
 		
 		int effectRow = 0;
 		try {
+<<<<<<< HEAD
+=======
+			// 分布锁一锁上后，马上将缓存删除
+			log.debug("根据flashSaleGoodsId:" + flashSaleGoods.getFlashSaleGoodsId() + "删除skuGoodsSpecValue缓存");
+			skuGoodsCacheService.delSKUGoodsSpecValueById(flashSaleGoods.getSpecValueId());
+			
+>>>>>>> 2089505... 第二次提交
 			effectRow = flashSaleGoodsDao.removeSpecValueById(flashSaleGoods.getSpecValueId());
 			if (effectRow != 1) {
 				throw new DAOException("修改goods_spec_values表异常");
 			}
+<<<<<<< HEAD
 			log.debug("根据flashSaleGoodsId:" + flashSaleGoods.getFlashSaleGoodsId() + "删除skuGoodsSpecValue缓存");
 			skuGoodsCacheService.delSKUGoodsSpecValueById(flashSaleGoods.getSpecValueId());
+=======
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改goods_spec_values表异常");
 			throw new DAOException(e);
@@ -135,14 +145,26 @@ public class FlashSaleGoodsServiceImpl implements FlashSaleGoodsService {
 			throw new DAOException(e);
 		}
 		try {
+<<<<<<< HEAD
 			effectRow = flashSaleGoodsDao.removeFlashSaleGoodsByName(flashSaleGoodsName);
 			if (effectRow != 1) {
 				throw new DAOException("修改flashsale_goods表异常");
 			}
+=======
+			// 分布锁一锁上后，马上将缓存删除
+>>>>>>> 2089505... 第二次提交
 			log.debug("根据flashSaleGoodsName:" + flashSaleGoods.getFlashSaleGoodsName() + "删除flashSaleGoods缓存");
 			flashSaleGoodsCacheService.delFlashSaleGoodsByName(flashSaleGoodsName);
 			log.debug("根据flashSaleGoodsId:" +  + flashSaleGoods.getFlashSaleGoodsId() + "删除flashSaleGoodsName：" + flashSaleGoods.getFlashSaleGoodsName() + "缓存");
 			flashSaleGoodsCacheService.delFlashSaleGoodsNameById(flashSaleGoods.getFlashSaleGoodsId());
+<<<<<<< HEAD
+=======
+			
+			effectRow = flashSaleGoodsDao.removeFlashSaleGoodsByName(flashSaleGoodsName);
+			if (effectRow != 1) {
+				throw new DAOException("修改flashsale_goods表异常");
+			}
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改flashsale_goods表异常");
 			throw new DAOException(e);
@@ -171,12 +193,22 @@ public class FlashSaleGoodsServiceImpl implements FlashSaleGoodsService {
 			try {
 				lock.acquire();
 				
+<<<<<<< HEAD
+=======
+				// 分布锁一锁上后，马上将缓存删除
+				log.debug("根据specValueId：" + databaseskuGoodsSpecValue.getSpecValueId() + "删除SKUGoodsSpecValue缓存");
+				skuGoodsCacheService.delSKUGoodsSpecValueById(databaseskuGoodsSpecValue.getSpecValueId());
+				
+>>>>>>> 2089505... 第二次提交
 				effectRow = flashSaleGoodsDao.updateSpecValue(databaseskuGoodsSpecValue);
 				if (effectRow != 1) {
 					throw new DAOException("修改goods_spec_values表异常");
 				}
+<<<<<<< HEAD
 				log.debug("根据specValueId：" + databaseskuGoodsSpecValue.getSpecValueId() + "删除SKUGoodsSpecValue缓存");
 				skuGoodsCacheService.delSKUGoodsSpecValueById(databaseskuGoodsSpecValue.getSpecValueId());
+=======
+>>>>>>> 2089505... 第二次提交
 			} catch (DataAccessException e) {
 				log.error("修改goods_spec_values表异常");
 				throw new DAOException(e);
@@ -217,15 +249,26 @@ public class FlashSaleGoodsServiceImpl implements FlashSaleGoodsService {
 			if (lock != null) {
 				lock.acquire();
 			}
+<<<<<<< HEAD
+=======
+			// 分布锁一锁上后，马上将缓存删除
+			log.debug("根据flashSaleGoodsId：" + databaseflashSaleGoods.getFlashSaleGoodsId() + "删除flashSaleGoods缓存");
+			flashSaleGoodsCacheService.delFlashSaleGoodsByName(databaseflashSaleGoods.getFlashSaleGoodsName());
+			log.debug("根据flashSaleGoodsId：" + databaseflashSaleGoods.getFlashSaleGoodsId() + "设置flashSaleGoodsName：" + databaseflashSaleGoods.getFlashSaleGoodsName() + "缓存：");
+			flashSaleGoodsCacheService.setFlashSaleGoodsNameById(databaseflashSaleGoods.getFlashSaleGoodsId(), databaseflashSaleGoods.getFlashSaleGoodsName());
+>>>>>>> 2089505... 第二次提交
 			
 			effectRow = flashSaleGoodsDao.updateFlashSaleGoods(databaseflashSaleGoods);
 			if (effectRow != 1) {
 				throw new DAOException("修改flashsale_goods表异常");
 			}
+<<<<<<< HEAD
 			log.debug("根据flashSaleGoodsId：" + databaseflashSaleGoods.getFlashSaleGoodsId() + "删除flashSaleGoods缓存");
 			flashSaleGoodsCacheService.delFlashSaleGoodsByName(databaseflashSaleGoods.getFlashSaleGoodsName());
 			log.debug("根据flashSaleGoodsId：" + databaseflashSaleGoods.getFlashSaleGoodsId() + "设置flashSaleGoodsName：" + databaseflashSaleGoods.getFlashSaleGoodsName() + "缓存：");
 			flashSaleGoodsCacheService.setFlashSaleGoodsNameById(databaseflashSaleGoods.getFlashSaleGoodsId(), databaseflashSaleGoods.getFlashSaleGoodsName());
+=======
+>>>>>>> 2089505... 第二次提交
 		} catch (DataAccessException e) {
 			log.error("修改flashsale_goods表异常");
 			throw new DAOException(e);
