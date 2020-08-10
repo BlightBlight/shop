@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<!-- 使用thymeleaf，配置相应的 -->
+<head>
+<meta charset="UTF-8"/><!--<meta charset="UTF-8" />  thymeleaf模板引擎默认是Template modes:HTML5解析的，所以解析比较严格。  -->
+<title>手机登录页面</title>
+	<!-- jquery -->
+	<!-- <script type="text/javascript" src="@{/js/jequery.min.js}"></script> -->
+	<script type="text/javascript" src="/jquery-validation/lib/jquery-1.11.1.js"></script>
+	<link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"/>
+	<script type="text/javascript"	 src="/bootstrap/js/bootstrap.min.js"></script>
+	<!-- layer -->
+	<script type="text/javascript" src="/layer/layer.js"></script>
+</head>
+<body>
+	<form action="" method="POST">
+        <input type="button" onclick="register()" value="注册">
+        <input type="button" onclick="mobileLogin()" value="手机登录">
+        <input type="button" onclick="updateCustomer()" value="修改用户">
+        <input type="button" onclick="getCustomer()" value="获取用户">
+        <input type="button" onclick="logoutCustomer()" value="登出用户">
+    </form>
+    <form action="" method="POST">
+        <input type="button" onclick="saveGoodsCategory()" value="新增商品分类">
+        <input type="button" onclick="removeGoodsCategory()" value="删除商品分类">
+        <input type="button" onclick="updateGoodsCategory()" value="修改商品分类">
+        <input type="button" onclick="getGoodsCategory()" value="获取商品分类">
+    </form>
+    <form action="" method="POST">
+        <input type="button" onclick="saveGoodsBrand()" value="新增商品品牌">
+        <input type="button" onclick="removeGoodsBrand()" value="删除商品品牌">
+        <input type="button" onclick="updateGoodsBrand()" value="修改商品品牌">
+        <input type="button" onclick="getGoodsBrand()" value="获取商品品牌">
+    </form>
+    <form action="" method="POST">
+        <input type="button" onclick="saveSPUGoods()" value="新增SPU商品">
+        <input type="button" onclick="removeSPUGoods()" value="删除SPU商品">
+        <input type="button" onclick="updateSPUGoods()" value="修改SPU商品">
+        <input type="button" onclick="getSPUGoods()" value="获取SPU商品">
+    </form>
+    <form action="" method="POST">
+        <input type="button" onclick="saveSKUGoods()" value="新增SKU商品">
+        <input type="button" onclick="removeSKUGoods()" value="删除SKU商品">
+        <input type="button" onclick="updateSKUGoods()" value="修改SKU商品">
+        <input type="button" onclick="getSKUGoods()" value="获取SKU商品">
+    </form>
+    <form action="" method="POST">
+        <input type="button" onclick="saveCartItem()" value="新增购物车商品">
+        <input type="button" onclick="removeCartItem()" value="删除购物车商品">
+        <input type="button" onclick="updateCartItemNumber()" value="修改购物车商品数量">
+        <input type="button" onclick="updateCartItemSpecValue()" value="修改购物车商品规格值">
+        <input type="button" onclick="getCartItem()" value="获取购物车商品">
+        <input type="button" onclick="checkCartItem()" value="勾选购物车商品">
+        <input type="button" onclick="showOrder()" value="下订单">
+    </form>
+    <form action="" method="POST">
+        <input type="button" onclick="saveOrder()" value="新增订单">
+        <input type="button" onclick="removeOrder()" value="删除订单">
+        <input type="button" onclick="updateOrder()" value="修改订单">
+        <input type="button" onclick="getOrder()" value="获取订单">
+    </form>
+    <form action="" method="POST">
+        <input type="button" onclick="saveFlashSaleGoods()" value="新增秒杀商品">
+        <input type="button" onclick="removeFlashSaleGoods()" value="删除秒杀商品">
+        <input type="button" onclick="updateFlashSaleGoods()" value="修改秒杀商品">
+        <input type="button" onclick="getFlashSaleGoods()" value="获取秒杀商品">
+    </form>
+    <form action="" method="POST">
+        <input type="button" onclick="savePromotion()" value="新增活动">
+        <input type="button" onclick="removePromotion()" value="删除活动">
+        <input type="button" onclick="updatePromotion()" value="修改活动">
+        <input type="button" onclick="getPromotion()" value="获取活动">
+    </form>
+    <form action="" method="POST">
+        <input type="button" onclick="toFlashSaleGoods()" value="秒杀商品">
+    </form>
+    <form>
+    <input type="button" onclick="test()" value="测试">
+    </form>
+</body>
+<script type="text/javascript">
+	function register() {
+		window.location.href = 'customer/register.html';
+	}
+	
+	function mobileLogin() {
+		window.location.href = 'customer/mobileLogin.html';
+	}
+	
+	function updateCustomer() {
+		window.location.href = 'customer/updateCustomer.html';
+	}
+	
+	function getCustomer() {
+		window.location.href = 'customer/getCustomer.html';
+	}
+	
+	function logoutCustomer() {
+		var tokenHead = getCookie("tokenHead");
+		var token = getCookie("token");
+		var adata  = 15815815024;
+		var data = JSON.stringify(adata);
+		$.ajax({
+			type : "POST",                           //通过POST方式上传请求
+			contentType : "application/json",		//上传内容格式为json结构
+			data : data,                            //上传的参数
+			url : "/customers/logout",     			//请求的url。与后端@Request Mapping注解中的值一致。
+			beforeSend: function(request) {
+	            request.setRequestHeader("Authorization", tokenHead + token);
+	        },
+			success : function(data) {		     	//请求成功的回调函数
+				if (data.code == 401) {
+					alert("用户登出成功");
+					window.location.href = "customer/mobileLogin.html";
+				} else if (data.code == 403) {
+			    	alert(data.message);
+				}
+			},
+			error : function(data) {		      		//请求失败的回调函数
+				alert("用户登出失败");
+			}
+		});
+	}
+	
+	
+	function saveGoodsCategory() {
+		window.location.href = 'category/saveGoodsCategory.html';
+	}
+	
+	function removeGoodsCategory() {
+		var tokenHead = getCookie("tokenHead");
+		var token = getCookie("token");
+		var categoryId = 6687463941360058368;
+		var adata  = "c";
+		var data = JSON.stringify(adata);
+		$.ajax({
+			type : "DELETE",                           //通过POST方式上传请求
+			contentType : "application/json",		//上传内容格式为json结构
+			data : data,                            //上传的参数
+			url : "/categorys/" + categoryId,     	//请求的url。与后端@Request Mapping注解中的值一致。
+			beforeSend: function(request) {
+	            request.setRequestHeader("Authorization", tokenHead + token);
+	        },
+			success : function(data) {		     	//请求成功的回调函数
+				if (data.code == 200) {
+					alert("商品分类删除成功");
+				} else {
+			    	alert(data.message);
+				}
+			},
+			error : function(data) {		      		//请求失败的回调函数
+				alert("商品分类删除失败");
+			}
+		});
+	}
+	
+	function updateGoodsCategory() {
+		window.location.href = 'category/updateGoodsCategory.html';
+	}
+	
+	function getGoodsCategory() {
+		window.location.href = 'category/getGoodsCategory.html';
+	}
+	
+	function saveGoodsBrand() {
+		window.location.href = 'brand/saveGoodsBrand.html';
+	}
+	
+	function removeGoodsBrand() {
+		var tokenHead = getCookie("tokenHead");
+		var token = getCookie("token");
+		var brandId = 6687464290187739136;
+		var adata  = "c";
+		var data = JSON.stringify(adata);
+		$.ajax({
+			type : "DELETE",                        //通过POST方式上传请求
+			contentType : "application/json",		//上传内容格式为json结构
+			data : data,                            //上传的参数
+			url : "/brands/" + brandId,     		//请求的url。与后端@Request Mapping注解中的值一致。
+			beforeSend: function(request) {
+	            request.setRequestHeader("Authorization", tokenHead + token);
+	        },
+			success : function(data) {		     	//请求成功的回调函数
+				if (data.code == 200) {
+					alert("商品品牌删除成功");
+				} else {
+			    	alert(data.message);
+				}
+			},
+			error : function(data) {		      		//请求失败的回调函数
+				alert("商品品牌删除失败");
+			}
+		});
+	}
+	
+	function updateGoodsBrand() {
+		window.location.href = 'brand/updateGoodsBrand.html';
+	}
+	
+	function saveSPUGoods() {
+		window.location.href = 'good/saveSPUGoods.html';
+	}
+	
+	function removeSPUGoods() {
+		var tokenHead = getCookie("tokenHead");
+		var token = getCookie("token");
+		var spuId = 6687464531376996352;
+		var adata  = "c";
+		var data = JSON.stringify(adata);
+		$.ajax({
+			type : "DELETE",                        //通过POST方式上传请求
+			contentType : "application/json",		//上传内容格式为json结构
+			data : data,                            //上传的参数
+			url : "/spuGoods/" + spuId,     		//请求的url。与后端@Request Mapping注解中的值一致。
+			beforeSend: function(request) {
+	            request.setRequestHeader("Authorization", tokenHead + token);
+	        },
+			success : function(data) {		     	//请求成功的回调函数
+				if (data.code == 200) {
+					alert("spu商品删除成功");
+				} else {
+			    	alert(data.message);
+				}
+			},
+			error : function(data) {		      		//请求失败的回调函数
+				alert("spu商品删除失败");
+			}
+		});
+	}
+	
+	function updateSPUGoods() {
+		window.location.href = 'good/updateSPUGoods.html';
+	}
+	
+	function saveSKUGoods() {
+		window.location.href = 'good/saveSKUGoods.html';
+	}
+	
+	function removeSKUGoods() {
+		var tokenHead = getCookie("tokenHead");
+		var token = getCookie("token");
+		var skuId = 6687465583576875008;
+		var adata  = "c";
+		var data = JSON.stringify(adata);
+		$.ajax({
+			type : "DELETE",                        //通过POST方式上传请求
+			contentType : "application/json",		//上传内容格式为json结构
+			data : data,                            //上传的参数
+			url : "/skuGoods/" + skuId,     		//请求的url。与后端@Request Mapping注解中的值一致。
+			beforeSend: function(request) {
+	            request.setRequestHeader("Authorization", tokenHead + token);
+	        },
+			success : function(data) {		     	//请求成功的回调函数
+				if (data.code == 200) {
+					alert("sku商品删除成功");
+				} else {
+			    	alert(data.message);
+				}
+			},
+			error : function(data) {		      		//请求失败的回调函数
+				alert("sku商品删除失败");
+			}
+		});
+	}
+	
+	function updateSKUGoods() {
+		window.location.href = 'good/updateSKUGoods.html';
+	}
+	
+	function saveCartItem() {
+		window.location.href = 'shopcart/saveCartItem.html';
+	}
+	
+	function removeCartItem() {
+		var tokenHead = getCookie("tokenHead");
+		var token = getCookie("token");
+		var skuId = 6687465583576875008;
+		var adata  = new Array();
+		adata[0] = '6687465583576875008';
+		adata[1] = '1111111111111111111';
+		var data = JSON.stringify(adata);
+		$.ajax({
+			type : "DELETE",                        //通过POST方式上传请求
+			contentType : "application/json",		//上传内容格式为json结构
+			data : data,                            //上传的参数
+			url : "/shopCarts/" + skuId,     		//请求的url。与后端@Request Mapping注解中的值一致。
+			beforeSend: function(request) {
+	            request.setRequestHeader("Authorization", tokenHead + token);
+	        },
+			success : function(data) {		     	//请求成功的回调函数
+				if (data.code == 200) {
+					alert("购物车商品删除成功");
+				} else {
+			    	alert(data.message);
+				}
+			},
+			error : function(data) {		      		//请求失败的回调函数
+				alert("购物车商品删除失败");
+			}
+		});
+	}
+	
+	function updateCartItemNumber() {
+		window.location.href = 'shopcart/updateCartItemNumber.html';
+	}
+	
+	function updateCartItemSpecValue() {
+		window.location.href = 'shopcart/updateCartItemSpecValue.html';
+	}
+	
+	function checkCartItem() {
+		window.location.href = 'shopcart/checkCartItem.html';
+	}
+	
+	function saveOrder() {
+		window.location.href = 'order/saveOrder.html';
+	}
+	
+	function removeOrder() {
+		window.location.href = 'order/removeOrder.html';
+	}
+	
+	function updateOrder() {
+		window.location.href = 'order/updateOrder.html';
+	}
+	
+	function getOrder() {
+		
+	}
+	
+	function saveFlashSaleGoods() {
+		window.location.href = 'flashSale/saveFlashSaleGoods.html';
+	}
+	
+	function removeFlashSaleGoods() {
+		var tokenHead = getCookie("tokenHead");
+		var token = getCookie("token");
+		var flashSaleGoodsId = flashSaleGoodsId;
+		var adata  = "c";
+		var data = JSON.stringify(adata);
+		$.ajax({
+			type : "DELETE",                        //通过POST方式上传请求
+			contentType : "application/json",		//上传内容格式为json结构
+			data : data,                            //上传的参数
+			url : "/flashSaleGoods/" + flashSaleGoodsId,     		//请求的url。与后端@Request Mapping注解中的值一致。
+			beforeSend: function(request) {
+	            request.setRequestHeader("Authorization", tokenHead + token);
+	        },
+			success : function(data) {		     	//请求成功的回调函数
+				if (data.code == 200) {
+					alert("秒杀商品删除成功");
+				} else {
+			    	alert(data.message);
+				}
+			},
+			error : function(data) {		      		//请求失败的回调函数
+				alert("秒杀商品删除失败");
+			}
+		});
+	}
+	
+	function updateFlashSaleGoods() {
+		window.location.href = 'flashSale/updatesaveFlashSaleGoods.html';
+	}
+	
+	function getFlashSaleGoods() {
+		
+	}
+	
+	function savePromotion() {
+		window.location.href = 'promotion/savePromotion.html';
+	}
+	
+	function removePromotion() {
+		window.location.href = 'order/removePromotion.html';
+	}
+	
+	function updatePromotion() {
+		window.location.href = 'order/updatePromotion.html';
+	}
+	
+	function getPromotion() {
+		
+	}
+	
+	function toFlashSaleGoods() {
+		window.location.href = 'flashSale/toFlashSaleGoods.html?flashSaleGoodsId=\"\"';
+	}
+	
+	
+	
+	
+	function test() {
+		var tokenHead = getCookie("tokenHead");
+		var token = getCookie("token");
+		$.ajax({
+			type : "POST",                           //通过POST方式上传请求
+			contentType : "application/json",		//上传内容格式为json结构
+			url : "/test",     						//请求的url。与后端@Request Mapping注解中的值一致。
+			beforeSend: function(request) {
+	            request.setRequestHeader("Authorization", tokenHead + token);
+	        },
+			success : function(data) {		     	//请求成功的回调函数
+				if(data.code == 200){
+					alert(data);
+				}else if(data.code == 401){
+					alert(data.message);
+					window.location.href = "customer/mobileLogin.html";
+				}else if(data.code == 403){
+			    	alert(data.message);
+					window.location.href = "mobileLogin.html";
+				}
+			},
+			error : function(data) {		      		//请求失败的回调函数
+				alert("测试失败");
+			}
+		});
+	}
+	
+	//读取cookies 
+    function getCookie(name) {
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+        if (arr = document.cookie.match(reg)) return unescape(arr[2]);
+        else return null;
+    }
+</script>
+</html>

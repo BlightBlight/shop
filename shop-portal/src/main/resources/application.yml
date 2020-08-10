@@ -1,0 +1,102 @@
+spring:
+  profiles:
+    active: dev #默认为开发环境
+  # 消息队列定义
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: feng
+    password: feng
+    publisher-confirms: true # 交换机触发confirms接口
+    publisher-returns: true # 找不到队列触发returns接口
+    template:
+      mandatory: true
+    listener:
+      simple:
+        acknowledge-mode: manual # 手动确认
+        concurrency: 1 # 消费者最小数量
+        max-concurrency: 10 # 消费者最大数量
+        prefresh: 1 # 单个请求处理的消息个数（大于等于事务最大数量；unack最大数量）
+
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
+  configuration:
+    mapUnderscoreToCamelCase: true
+
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: shop-portal-secret #JWT加解密使用的密钥
+  expiration: 604800 #JWT的超期限时间(60*60*24*7)
+  tokenHead: 'Bearer '  #JWT负载中拿到开头
+
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /**/*.html
+      - /customer/*
+      - /customers/**
+
+# 自定义redis key
+redis:
+  database: feng
+  key:
+    authCode: 'authCode'
+    token: 'token'
+    customer: 'customer'
+    customerInfo: 'customerInfo'
+    category: 'category'
+    brand: 'brand'
+    spuGoods: 'spuGoods'
+    spuGoodsSpec: 'spuGoodsSpec'
+    skuGoods: 'skuGoods'
+    skuGoodsSpecValue: 'skuGoodsSpecValue'
+    cartItem: 'cartItem'
+    shopCart: 'shopCart'
+    orderId: 'orderId'
+    flashSaleGoods : 'flashSaleGoods'
+    flashSaleGoodsStock: 'flashSaleGoodsStock'
+    flashSaleGoodsPath: 'flashSaleGoodsPath'
+    flashSaleGoodsVerifyCode: 'flashSaleGoodsVerifyCode'
+    flashSaleCustomer: 'flashSaleCustomer'
+    flashSaleOrder: 'flashSaleOrder'
+  expire:
+    common: 86400 # 24小时
+    authCode: 180 # 验证码默认超期时间3分钟
+    token: 1800 # token默认过期时间30分钟
+    category: 86400 # 商品分类默认过期时间24小时
+    brand: 86400 # 商品品牌默认过期时间24小时
+    spuGoods: 180 # spu商品默认不过期，但是我忘了怎么设置了，先这样吧
+    spuGoodsSpec: 180 # 规格默认超期时间3分钟
+    skuGoods: 360 # sku商品默认过期时间6分钟
+    skuGoodsSpecValue: 180 # 规格值默认超期时间3分钟
+    cartItem: 1800 # 购物车选项默认过期时间30分钟
+    shopCart: 1800 # 购物车默认过期时间30分钟
+    flashSaleGoods : 36000 # 秒杀商品默认过期时间10小时
+    flashSaleGoodsStock: 36000 # 秒杀商品库存默认过期时间10小时
+    flashSaleGoodsPath: 180 # 秒杀地址默认过期时间3分钟
+    flashSaleGoodsVerifyCode: 180 # 秒杀验证码默认过期时间3分钟
+    flashSaleOrder: 36000 # 秒杀订单默认过期时间10小时
+
+zookeeper:
+  url: 127.0.0.1:2181
+  localPath: /newlock
+  timeout: 4000
+  key:
+    spuGoods: 'spuGoods'
+  lockScope:
+    customers: 'customers'
+    categorys: 'categorys'
+    brands: 'brands'
+    spuGoods: 'spuGoods'
+    skuGoods: 'skuGoods'
+    shopcarts: 'shopcarts'
+    orders: 'orders'
+    flashsales: 'flashsales'
+  
+

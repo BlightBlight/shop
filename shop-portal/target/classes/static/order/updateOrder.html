@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<!-- 使用thymeleaf，配置相应的 -->
+<html xmlns:th="http://www.thymeleaf.org">  <!-- th!!! 命名空间使用 -->
+<head>
+<meta charset="UTF-8"/><!--<meta charset="UTF-8" />  thymeleaf模板引擎默认是Template modes:HTML5解析的，所以解析比较严格。  -->
+<title>修改购物车商品页面</title>
+	<!-- jquery -->
+	<!-- <script type="text/javascript" src="@{/js/jequery.min.js}"></script> -->
+	<script type="text/javascript" src="/jquery-validation/lib/jquery-1.11.1.js"></script>
+	<link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"/>
+	<script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+	<!-- layer -->
+	<script type="text/javascript" src="/layer/layer.js"></script>
+</head>
+<body>
+	<form action="" method="POST">
+		<input type="hidden" id="skuId" name="skuId" value="6687465583576875008">
+		<input type="hidden" id="shopId" name="shopId" value="1111111111111111111">
+		<input type="text" id="specValue" name="specValue" value="c"><br>
+        <input type="text" id="price" name="price" value="3"><br>
+        <input type="text" id="number" name="number" placeHolder="商品数量"><br>
+        <input type="button" onclick="updateCartItem()" value = "提交">
+    </form>
+</body>
+<script type="text/javascript">
+	function updateCartItem() {
+		var tokenHead = getCookie("tokenHead");
+		var token = getCookie("token");
+		
+		var time = new Date();
+		/*格式化月，如果小于9，则补0*/
+		var month = ("0" + (time.getMonth() + 1)).slice(-2);
+		/*格式化日，如果小于9，则补0*/
+		var day = ("0" + time.getDate()).slice(-2);
+		/*格式化小时，如果小于9，则补0*/
+		var hours = ("0" + (time.getHours())).slice(-2);
+		/*格式化分钟，如果小于9，则补0*/
+		var minutes = ("0" + (time.getMinutes())).slice(-2);
+		/*格式化秒，如果小于9，则补0*/
+		var seconds = ("0" + (time.getSeconds())).slice(-2);
+		/*拼接日期*/
+		var today = time.getFullYear() + "-" + (month) + "-" + (day) + " " + (hours) + ":" + (minutes) + ":" + (seconds);
+		//需要上传的用户参数
+		var adata = {
+				"skuId" : $("#skuId").val(),
+				"shopId" : $("#shopId").val(),
+				"specValue" : $("#specValue").val(),
+				"price" : $("#price").val(),
+				"number" : $("#number").val(),
+				"updateTime" : today,
+		}
+		var data = JSON.stringify(adata);
+		$.ajax({
+			type : "PUT",                       	//通过POST方式上传请求
+			contentType : "application/json",		//上传内容格式为json结构
+			data : data,                          	//上传的参数
+			url : "/shopCarts",     				//请求的url。与后端@Request Mapping注解中的值一致。
+			beforeSend: function(request) {
+	            request.setRequestHeader("Authorization", tokenHead + token);
+	        },
+			success : function(data) {		     	//请求成功的回调函数
+				if (data.code == 200) {
+					alert("修改购物车商品成功");
+					window.location.replace("/home.html");
+				} else {
+					alert(data.message);
+				}
+			},
+			error : function() {		      		//请求失败的回调函数
+				alert("修改购物车商品失败");
+			}
+		});
+	}
+	
+	//读取cookies 
+    function getCookie(name) {
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+        if (arr = document.cookie.match(reg)) return unescape(arr[2]);
+        else return null;
+    }
+</script>
+</html>

@@ -1,0 +1,28 @@
+package com.shop.common.utils;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+import org.apache.commons.lang3.StringUtils;
+
+public class IsMobileValidator implements ConstraintValidator<IsMobile, String> {
+
+	private boolean required = false;
+
+	public void initialize(IsMobile constraintAnnotation) {
+		constraintAnnotation.required();
+	}
+
+	public boolean isValid(String mobileNum, ConstraintValidatorContext context) {
+		if (required) {// 查看值是否是必须的
+			return ValidatorUtil.isMobile(mobileNum);
+		} else {
+			if (StringUtils.isEmpty(mobileNum)) {// required
+				return true;
+			} else {
+				return ValidatorUtil.isMobile(mobileNum);
+			}
+		}
+	}
+
+}
